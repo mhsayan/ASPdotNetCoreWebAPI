@@ -1,6 +1,5 @@
-﻿namespace Application.Operation.Contexts
+﻿namespace Application.Operation.Contexts;
+
+public interface IOperationDbContext
 {
-    public interface IOperationDbContext
-    {
-    }
 }

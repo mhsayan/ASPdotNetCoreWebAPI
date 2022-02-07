@@ -1,3 +1,6 @@
+using Application.Api;
+using Application.Operation;
+using Application.Operation.Contexts;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
@@ -11,19 +14,15 @@ var migrationAssemblyName = typeof(Program).Assembly.FullName;
 
 // Add services to the container.
 
-// builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//     options.UseSqlServer(connectionString, b =>
-//         b.MigrationsAssembly(migrationAssemblyName)));
-// builder.Services.AddDbContext<PlatformDbContext>(options =>
-//     options.UseSqlServer(connectionString, b =>
-//         b.MigrationsAssembly(migrationAssemblyName)));
+builder.Services.AddDbContext<OperationDbContext>(options =>
+    options.UseSqlServer(connectionString, b =>
+        b.MigrationsAssembly(migrationAssemblyName)));
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 {
-    // containerBuilder.RegisterModule(new WebModule());
-    // containerBuilder.RegisterModule(new MembershipModule(connectionString, migrationAssemblyName));
-    // containerBuilder.RegisterModule(new PlatformModule(connectionString, migrationAssemblyName));
+    containerBuilder.RegisterModule(new ApiModule());
+    containerBuilder.RegisterModule(new OperationModule(connectionString, migrationAssemblyName));
 });
 
 builder.Host.UseSerilog((ctx, lc) => lc
