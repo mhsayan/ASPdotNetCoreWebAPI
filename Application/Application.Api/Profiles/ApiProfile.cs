@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using Application.Api.Models;
+using Application.Operation.BusinessObjects;
+using AutoMapper;
 
 namespace Application.Api.Profiles;
 
@@ -6,6 +8,6 @@ public class ApiProfile : Profile
 {
     public ApiProfile()
     {
-        // CreateMap<CreateQuestionModel, BO.Question>().ReverseMap();
+        CreateMap<CreateStudentModel, Student>().ReverseMap();
     }
 }

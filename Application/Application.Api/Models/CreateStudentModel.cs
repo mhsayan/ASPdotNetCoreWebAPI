@@ -1,4 +1,5 @@
-﻿using Application.Operation.Services;
+﻿using Application.Operation.BusinessObjects;
+using Application.Operation.Services;
 using Autofac;
 using AutoMapper;
 
@@ -14,9 +15,15 @@ public class CreateStudentModel
     private ILifetimeScope _scope;
     private IStudentService _studentService { get; set; }
     private IMapper _mapper;
-    
+
     public CreateStudentModel()
     {
+    }
+
+    public CreateStudentModel(IStudentService studentService, IMapper mapper)
+    {
+        _studentService = studentService;
+        _mapper = mapper;
     }
 
     public virtual void Resolve(ILifetimeScope scope)
@@ -26,11 +33,9 @@ public class CreateStudentModel
         _mapper = _scope.Resolve<IMapper>();
     }
 
-    public CreateStudentModel(IStudentService studentService, IMapper mapper)
+    public void CreateStudent()
     {
-        _studentService = studentService;
-        _mapper = mapper;
+        var student = _mapper.Map<Student>(this);
+        _studentService.Create(student);
     }
-
-    
 }

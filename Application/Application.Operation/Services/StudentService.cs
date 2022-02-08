@@ -16,4 +16,12 @@ public class StudentService : IStudentService
         _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
+
+    public void Create(BO.Student student)
+    {
+        var studentEntity = _mapper.Map<EO.Student>(student);
+
+        _unitOfWork.Students.Add(studentEntity);
+        _unitOfWork.Save();
+    }
 }

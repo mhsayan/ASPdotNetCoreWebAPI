@@ -1,3 +1,4 @@
+using Application.Api.Models;
 using Autofac;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +16,7 @@ public class StudentController : ControllerBase
         _logger = logger;
         _scope = scope;
     }
-    
+
     // // GET: api/<ValuesController>
     // [HttpGet]
     // public object Get()
@@ -30,7 +31,7 @@ public class StudentController : ControllerBase
     // }
 
     // GET api/<ValuesController>/5
-    [HttpGet("{id}")]
+    [HttpGet("{id}", Name = "GetStudent")]
     public string Get(int id)
     {
         return "value";
@@ -46,16 +47,31 @@ public class StudentController : ControllerBase
 
     // POST api/<ValuesController>
     [HttpPost]
-    public void Post([FromBody] string value)
+    public async Task<IActionResult> Post([FromBody] CreateStudentModel model)
     {
+        // model validation 
+        if (model == null)
+        {
+            return BadRequest();
+        }
 
+        if (!ModelState.IsValid)
+        {
+            // return 422 - Not Processable Entity when validation fails
+            return new UnprocessableEntityObjectResult(ModelState);
+        }
+
+        model.Resolve(_scope);
+        model.CreateStudent();
+
+        return Ok();
     }
 
     // PUT api/<ValuesController>/5
     [HttpPut("{id}")]
     public void Put(int id, [FromBody] string value)
     {
-            
+
     }
 
     // DELETE api/<ValuesController>/5
