@@ -111,6 +111,6 @@ public class StudentController : ControllerBase
 
         model.DeleteStudent(id);
 
-        return Ok(model);
+        return Ok();
     }
 }
