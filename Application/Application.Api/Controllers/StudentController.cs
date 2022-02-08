@@ -31,10 +31,15 @@ public class StudentController : ControllerBase
     // }
 
     // GET api/<ValuesController>/5
-    [HttpGet("{id}", Name = "GetStudent")]
-    public string Get(int id)
+    [HttpGet("{id:guid}", Name = "GetStudent")]
+    public async Task<ActionResult<GetStudentModel>> Get(Guid id)
     {
-        return "value";
+        var model = _scope.Resolve<GetStudentModel>();
+        model.Resolve(_scope);
+
+        model.GetStudent(id);
+
+        return Ok(model);
     }
 
     // [HttpGet("GetData")]
@@ -64,14 +69,37 @@ public class StudentController : ControllerBase
         model.Resolve(_scope);
         model.CreateStudent();
 
+        //return CreatedAtRoute("GetStudent",
+        //    new { id = movieEntity.Id },
+        //    _mapper.Map<Models.Movie>(movieEntity));
+
         return Ok();
     }
 
     // PUT api/<ValuesController>/5
     [HttpPut("{id}")]
-    public void Put(int id, [FromBody] string value)
+    public async Task<IActionResult> Put(Guid id, [FromBody] UpdateStudentModel model)
     {
+        // model validation 
+        if (model == null)
+        {
+            return BadRequest();
+        }
 
+        if (!ModelState.IsValid)
+        {
+            // return 422 - Not Processable Entity when validation fails
+            return new UnprocessableEntityObjectResult(ModelState);
+        }
+
+        model.Resolve(_scope);
+        model.UpdateStudent(id);
+
+        //return CreatedAtRoute("GetStudent",
+        //    new { id = movieEntity.Id },
+        //    _mapper.Map<Models.Movie>(movieEntity));
+
+        return Ok();
     }
 
     // DELETE api/<ValuesController>/5

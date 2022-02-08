@@ -24,4 +24,24 @@ public class StudentService : IStudentService
         _unitOfWork.Students.Add(studentEntity);
         _unitOfWork.Save();
     }
+
+    public BO.Student GetStudent(Guid studentId)
+    {
+        var studentEntity = _unitOfWork.Students.GetById(studentId);
+
+        return _mapper.Map<BO.Student>(studentEntity);
+    }
+
+    public void UpdateStudent(Guid studentId, BO.Student student)
+    {
+        var studentEntity = _unitOfWork.Students.GetById(studentId);
+
+        if (studentEntity != null)
+        {
+            _mapper.Map(student, studentEntity);
+            _unitOfWork.Save();
+        }
+        else
+            throw new InvalidOperationException("Couldn't find student");
+    }
 }
