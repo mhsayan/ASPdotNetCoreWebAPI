@@ -41,4 +41,9 @@ public class GetStudentModel
 
         _mapper.Map(student, this);
     }
+
+    public void DeleteStudent(Guid studentId)
+    {
+        _studentService.DeleteStudent(studentId);
+    }
 }

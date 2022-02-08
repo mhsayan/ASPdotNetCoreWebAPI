@@ -104,7 +104,13 @@ public class StudentController : ControllerBase
 
     // DELETE api/<ValuesController>/5
     [HttpDelete("{id}")]
-    public void Delete(int id)
+    public async Task<IActionResult> Delete(Guid id)
     {
+        var model = _scope.Resolve<GetStudentModel>();
+        model.Resolve(_scope);
+
+        model.DeleteStudent(id);
+
+        return Ok(model);
     }
 }

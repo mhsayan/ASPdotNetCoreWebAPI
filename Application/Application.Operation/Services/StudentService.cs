@@ -44,4 +44,10 @@ public class StudentService : IStudentService
         else
             throw new InvalidOperationException("Couldn't find student");
     }
+
+    public void DeleteStudent(Guid studentId)
+    {
+        _unitOfWork.Students.Remove(studentId);
+        _unitOfWork.Save();
+    }
 }
